@@ -17,15 +17,24 @@ const PORT = process.env.PORT || 3000;
 // On your hosting service (like Heroku or Vercel), you will add a
 // configuration variable named MONEYMOTION_API_KEY and set its value to the
 // secret key you got from MoneyMotion.io.
-//
-// The key you provided was: beec6c29-19bc-4b36-aac3-16eaeef0a59c_...
-// PLEASE REGENERATE THIS KEY on MoneyMotion.io as it has been exposed.
 // ==============================================================================
 const MONEYMOTION_API_KEY = process.env.MONEYMOTION_API_KEY;
 
-// Use CORS to allow your website to make requests to this server
+// ==============================================================================
+// --- FIX FOR "FAILED TO FETCH" ERROR ---
+// The `cors` middleware needs to run before any of your routes.
+// This tells the browser that your server will accept requests from other domains.
 app.use(cors()); 
+// ==============================================================================
+
+// This middleware is needed to parse JSON bodies from incoming requests
 app.use(express.json());
+
+// A simple "health check" route to verify the server is running
+app.get('/', (req, res) => {
+    res.send('NextLevelCheats server is running correctly.');
+});
+
 
 // This is the endpoint your website will call when a user wants to pay
 app.post('/create-payment', async (req, res) => {
